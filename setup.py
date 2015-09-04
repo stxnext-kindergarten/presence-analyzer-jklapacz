@@ -1,17 +1,24 @@
+# -*- coding: utf-8 -*-
+"""
+Setup for presence analyzer web app
+"""
 from setuptools import setup, find_packages
 import os
 
-name = "presence_analyzer"
-version = "0.1.0"
+NAME = "presence_analyzer"
+VERSION = "0.1.0"
 
 
 def read(*rnames):
+    """
+    Read data from file
+    """
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
 
 setup(
-    name=name,
-    version=version,
+    name=NAME,
+    version=VERSION,
     description="Presence analyzer",
     long_description=read('README.md'),
     classifiers=[],
