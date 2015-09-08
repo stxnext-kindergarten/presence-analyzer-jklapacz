@@ -89,14 +89,6 @@ def presence_start_end_view(user_id):
         abort(404)
 
     weekdays = group_start_end_by_weekday(data[user_id])
-    # return [
-    #     {
-    #         'weekday': calendar.day_abbr[weekday],
-    #         'start': mean(items['start']),
-    #         'end': mean(items['end'])
-    #     }
-    #     for weekday, items in enumerate(weekdays)
-    # ]
     return [
         (calendar.day_abbr[weekday], mean(items['start']), mean(items['end']))
         for weekday, items in enumerate(weekdays)
