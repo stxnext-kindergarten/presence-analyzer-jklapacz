@@ -57,9 +57,6 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         """
         Test presence time of given user.
         """
-        resp = self.client.get('/api/v1/presence_weekday/100')
-        self.assertEqual(resp.status_code, 404)
-
         resp = self.client.get('/api/v1/presence_weekday/10')
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.content_type, 'application/json')
@@ -68,22 +65,32 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         self.assertEqual(data[0], ["Weekday", "Presence (s)"])
         self.assertEqual(data[1], ["Mon", 0])
 
+    def test_api_presence_weekday_no_user(self):
+        """
+        Testing wrong user id.
+        """
+        resp = self.client.get('/api/v1/presence_weekday/100')
+        self.assertEqual(resp.status_code, 404)
+
     def test_api_mean_time_weekday(self):
         """
         Test mean presence time of given user.
         """
-        resp = self.client.get('/api/v1/mean_time_weekday/100')
-        self.assertEqual(resp.status_code, 404)
-
-        resp = self.client.get('/api/v1/mean_time_weekday/dummy')
-        self.assertEqual(resp.status_code, 404)
-
         resp = self.client.get('/api/v1/mean_time_weekday/10')
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.content_type, 'application/json')
         data = json.loads(resp.data)
         self.assertEqual(len(data), 7)
         self.assertEqual(data[0], ["Mon", 0])
+
+    def test_api_mean_time_weekday_no_user(self):
+        """
+        Testing wrong user id.
+        """
+        resp = self.client.get('/api/v1/mean_time_weekday/100')
+        self.assertEqual(resp.status_code, 404)
+        resp = self.client.get('/api/v1/mean_time_weekday/dummy')
+        self.assertEqual(resp.status_code, 404)
 
 
 class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
