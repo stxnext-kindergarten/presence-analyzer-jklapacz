@@ -104,18 +104,16 @@
                         chart_div.hide();
 
                         $.getJSON("/api/v1/presence_start_end/"+selected_user, function(result) {
-                            var formated = []
                             $.each(result, function(index, value) {
-                                if ((value.start > 0) || (value.end > 0)) {
-                                    formated.push([value.weekday, parseInterval(value.start), parseInterval(value.end)])
-                                }
+                                value[1] = parseInterval(value[1]);
+                                value[2] = parseInterval(value[2]);
                             });
 
                             var data = new google.visualization.DataTable();
                             data.addColumn('string', 'weekday');
                             data.addColumn({ type: 'datetime', id: 'start' });
                             data.addColumn({ type: 'datetime', id: 'end' });
-                            data.addRows(formated);
+                            data.addRows(result);
 
                             var options = {
                                 hAxis: {title: 'Weekday'}
