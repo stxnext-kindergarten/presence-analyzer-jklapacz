@@ -83,6 +83,29 @@ def group_by_weekday(items):
     return result
 
 
+def group_start_end_by_weekday(items):
+    """
+    Calculates mean start/end date by weekday.
+    """
+    result = [
+        {'start': [], 'end': []},
+        {'start': [], 'end': []},
+        {'start': [], 'end': []},
+        {'start': [], 'end': []},
+        {'start': [], 'end': []},
+        {'start': [], 'end': []},
+        {'start': [], 'end': []}
+    ]
+    for date in items:
+        start = items[date]['start']
+        end = items[date]['end']
+        weekday = date.weekday()
+
+        result[weekday]['start'].append(seconds_since_midnight(start))
+        result[weekday]['end'].append(seconds_since_midnight(end))
+    return result
+
+
 def seconds_since_midnight(time):
     """
     Calculates amount of seconds since midnight.
