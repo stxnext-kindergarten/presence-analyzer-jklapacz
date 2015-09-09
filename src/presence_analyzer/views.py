@@ -26,7 +26,7 @@ def presence_weekday_template_view():
     Presence by weekday page (front page)
     """
     title = 'Presence by weekday'
-    return render_template('presence_weekday.html', title=title, menu_item=1)
+    return render_template('presence_weekday.html', title=title)
 
 
 @app.route('/mean_time_weekday')
@@ -35,7 +35,7 @@ def mean_time_weekday_template_view():
     Presence mean time by weekday page
     """
     title = 'Presence mean time by weekday'
-    return render_template('mean_time_weekday.html', title=title, menu_item=2)
+    return render_template('mean_time_weekday.html', title=title)
 
 
 @app.route('/presence_start_end')
@@ -44,7 +44,7 @@ def presence_start_end_template_view():
     Presence start-end weekday
     """
     title = 'Presence start-end weekday'
-    return render_template('presence_start_end.html', title=title, menu_item=3)
+    return render_template('presence_start_end.html', title=title)
 
 
 @app.route('/api/v1/users', methods=['GET'])

@@ -19,6 +19,8 @@
     {% endblock %}
 </head>
 
+{% set active_menu_item = active_menu_item|default(0) %}
+
 <body>
     <div id="main">
         <div id="header">
@@ -29,5 +31,7 @@
             {% include "content.html" %}
         </div>
     </div>
+
+
 </body>
 </html>
