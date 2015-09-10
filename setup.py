@@ -38,6 +38,7 @@ setup(
     entry_points="""
     [console_scripts]
     flask-ctl = presence_analyzer.script:run
+    cron_jobs_update_xml = presence_analyzer.cron_jobs:update_users_xml
 
     [paste.app_factory]
     main = presence_analyzer.script:make_app
