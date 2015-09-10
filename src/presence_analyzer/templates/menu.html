@@ -1,0 +1,5 @@
+<ul>
+    <li {% if active_menu_item is equalto 1 %} id="selected" {% endif %} ><a href="{{ url_for('presence_weekday_template_view') }}">Presence by weekday</a></li>
+    <li {% if active_menu_item is equalto 2 %} id="selected" {% endif %} ><a href="{{ url_for('mean_time_weekday_template_view') }}">Presence mean time</a></li>
+    <li {% if active_menu_item is equalto 3 %} id="selected" {% endif %} ><a href="{{ url_for('presence_start_end_template_view') }}">Presence start-end</a></li>
+</ul>
