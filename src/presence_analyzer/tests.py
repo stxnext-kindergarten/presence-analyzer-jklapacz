@@ -95,7 +95,7 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         self.assertEqual(resp.content_type, 'application/json')
         data = json.loads(resp.data)
         self.assertEqual(len(data), 2)
-        self.assertEqual(data['success'], True)
+        self.assertTrue(data['success'])
 
     def test_api_presence_weekday_no_user(self):
         """
@@ -116,7 +116,7 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         self.assertEqual(resp.content_type, 'application/json')
         data = json.loads(resp.data)
         self.assertEqual(len(data), 2)
-        self.assertEqual(data['success'], True)
+        self.assertTrue(data['success'])
 
     def test_api_mean_time_weekday_no_user(self):
         """
@@ -133,7 +133,7 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.content_type, 'application/json')
         data = json.loads(resp.data)
-        self.assertEqual(data['success'], False)
+        self.assertFalse(data['success'])
 
     def test_api_presence_start_end_weekday(self):
         """
@@ -144,7 +144,7 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         self.assertEqual(resp.content_type, 'application/json')
         data = json.loads(resp.data)
         self.assertEqual(len(data), 2)
-        self.assertEqual(data['success'], True)
+        self.assertTrue(data['success'])
 
     def test_api_presence_start_end_weekday_wrong_user(self):
         """
@@ -154,7 +154,7 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.content_type, 'application/json')
         data = json.loads(resp.data)
-        self.assertEqual(data['success'], False)
+        self.assertFalse(data['success'])
 
     def test_api_presence_start_end_weekday_no_user(self):
         """

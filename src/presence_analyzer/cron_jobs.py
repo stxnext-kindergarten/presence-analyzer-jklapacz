@@ -22,7 +22,7 @@ def update_users_xml():
     )
 
     if len(sys.argv) == 2:
-        app.config.update({'REMOTE_USERS_XML_URL': sys.argv[1]})
+        app.config['REMOTE_USERS_XML_URL'] = sys.argv[1]
 
     remote = urllib2.urlopen(app.config['REMOTE_USERS_XML_URL'])
     with open(app.config['USERS_XML'], 'w') as local:
