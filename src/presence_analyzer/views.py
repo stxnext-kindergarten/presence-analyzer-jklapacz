@@ -63,7 +63,7 @@ def users_json_view():
 @app.route('/api/v1/mean_time_weekday/')
 @app.route('/api/v1/mean_time_weekday/<int:user_id>', methods=['GET'])
 @utils.jsonify
-def mean_time_weekday_json_view(user_id=0):
+def mean_time_weekday_json_view(user_id=None):
     """
     Returns mean presence time of given user grouped by weekday.
     """
@@ -84,7 +84,7 @@ def mean_time_weekday_json_view(user_id=0):
 @app.route('/api/v1/presence_weekday/')
 @app.route('/api/v1/presence_weekday/<int:user_id>', methods=['GET'])
 @utils.jsonify
-def presence_weekday_json_view(user_id=0):
+def presence_weekday_json_view(user_id=None):
     """
     Returns total presence time of given user grouped by weekday.
     """
@@ -106,7 +106,7 @@ def presence_weekday_json_view(user_id=0):
 @app.route('/api/v1/presence_start_end/')
 @app.route('/api/v1/presence_start_end/<int:user_id>', methods=['GET'])
 @utils.jsonify
-def presence_start_end_json_view(user_id=0):
+def presence_start_end_json_view(user_id=None):
     """
     Returns mean start & end time of given user grouped by weekday
     (mean time when user begins work, mean time when user finish work)
