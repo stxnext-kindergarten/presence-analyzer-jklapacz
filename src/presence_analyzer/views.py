@@ -53,8 +53,7 @@ def users_json_view():
     """
     Users listing for dropdown.
     """
-    data = utils.get_users()
-    return data
+    return utils.get_users()
 
 
 @app.route('/api/v1/mean_time_weekday/')

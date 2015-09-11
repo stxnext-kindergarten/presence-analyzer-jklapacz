@@ -77,9 +77,12 @@ def get_users():
     """
     tree = etree.parse(app.config['USERS_XML'])
     server = tree.find('server')
-    path = server.find('protocol').text + '://' + server.find('host').text
+    path = "{}://{}".format(
+        server.find('protocol').text,
+        server.find('host').text
+    )
 
-    data = [
+    return [
         {
             'name': user.find('name').text,
             'user_id': user.attrib['id'],
@@ -87,8 +90,6 @@ def get_users():
         }
         for user in tree.iter('user')
     ]
-
-    return data
 
 
 def group_by_weekday(items):
