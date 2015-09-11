@@ -7,7 +7,7 @@ import csv
 from json import dumps
 from functools import wraps
 from datetime import datetime
-
+from lxml import etree
 from flask import Response
 
 from presence_analyzer.main import app
@@ -69,6 +69,27 @@ def get_data():
             data.setdefault(user_id, {})[date] = {'start': start, 'end': end}
 
     return data
+
+
+def get_users():
+    """
+    Get users from xml local file
+    """
+    tree = etree.parse(app.config['USERS_XML'])
+    server = tree.find('server')
+    path = "{}://{}".format(
+        server.find('protocol').text,
+        server.find('host').text
+    )
+
+    return [
+        {
+            'name': user.find('name').text,
+            'user_id': user.attrib['id'],
+            'avatar': path + user.find('avatar').text
+        }
+        for user in tree.iter('user')
+    ]
 
 
 def group_by_weekday(items):

@@ -4,7 +4,7 @@ Defines views.
 """
 
 import calendar
-from flask import redirect, abort, render_template, url_for
+from flask import redirect, render_template, url_for
 from presence_analyzer.main import app
 from presence_analyzer import utils
 
@@ -53,11 +53,7 @@ def users_json_view():
     """
     Users listing for dropdown.
     """
-    data = utils.get_data()
-    return [
-        {'user_id': i, 'name': 'User {0}'.format(str(i))}
-        for i in data.keys()
-    ]
+    return utils.get_users()
 
 
 @app.route('/api/v1/mean_time_weekday/')
@@ -70,7 +66,7 @@ def mean_time_weekday_json_view(user_id=None):
     data = utils.get_data()
     if user_id not in data:
         log.debug('User %s not found!', user_id)
-        abort(404)
+        return {'success': False, 'data': []}
 
     weekdays = utils.group_by_weekday(data[user_id])
     result = [
@@ -78,7 +74,7 @@ def mean_time_weekday_json_view(user_id=None):
         for weekday, intervals in enumerate(weekdays)
     ]
 
-    return result
+    return {'success': True, 'data': result}
 
 
 @app.route('/api/v1/presence_weekday/')
@@ -91,7 +87,7 @@ def presence_weekday_json_view(user_id=None):
     data = utils.get_data()
     if user_id not in data:
         log.debug('User %s not found!', user_id)
-        abort(404)
+        return {'success': False, 'data': []}
 
     weekdays = utils.group_by_weekday(data[user_id])
     result = [
@@ -100,7 +96,7 @@ def presence_weekday_json_view(user_id=None):
     ]
 
     result.insert(0, ('Weekday', 'Presence (s)'))
-    return result
+    return {'success': True, 'data': result}
 
 
 @app.route('/api/v1/presence_start_end/')
@@ -114,10 +110,10 @@ def presence_start_end_json_view(user_id=None):
     data = utils.get_data()
     if user_id not in data:
         log.debug('User %s not found!', user_id)
-        abort(404)
+        return {'success': False, 'data': []}
 
     weekdays = utils.group_start_end_by_weekday(data[user_id])
-    return [
+    result = [
         (
             calendar.day_abbr[weekday],
             utils.mean(items['start']),
@@ -125,3 +121,4 @@ def presence_start_end_json_view(user_id=None):
         )
         for weekday, items in enumerate(weekdays)
     ]
+    return {'success': True, 'data': result}

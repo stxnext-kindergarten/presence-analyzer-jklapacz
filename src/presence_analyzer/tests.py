@@ -7,11 +7,15 @@ import json
 import datetime
 import unittest
 
-from presence_analyzer import main, views, utils
+from presence_analyzer import main, utils
 
 
 TEST_DATA_CSV = os.path.join(
     os.path.dirname(__file__), '..', '..', 'runtime', 'data', 'test_data.csv'
+)
+
+TEST_USERS_XML = os.path.join(
+    os.path.dirname(__file__), '..', '..', 'runtime', 'data', 'test_users.xml'
 )
 
 
@@ -26,6 +30,7 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         Before each test, set up a environment.
         """
         main.app.config.update({'DATA_CSV': TEST_DATA_CSV})
+        main.app.config.update({'USERS_XML': TEST_USERS_XML})
         self.client = main.app.test_client()
 
     def tearDown(self):
@@ -71,8 +76,15 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.content_type, 'application/json')
         data = json.loads(resp.data)
-        self.assertEqual(len(data), 2)
-        self.assertDictEqual(data[0], {u'user_id': 10, u'name': u'User 10'})
+        self.assertEqual(len(data), 3)
+        self.assertDictEqual(
+            data[0],
+            {
+                'user_id': '10',
+                'name': 'Adam P.',
+                'avatar': 'https://intranet.stxnext.pl/api/images/users/141'
+            }
+        )
 
     def test_api_presence_weekday(self):
         """
@@ -82,16 +94,18 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.content_type, 'application/json')
         data = json.loads(resp.data)
-        self.assertEqual(len(data), 8)
-        self.assertEqual(data[0], ["Weekday", "Presence (s)"])
-        self.assertEqual(data[1], ["Mon", 0])
+        self.assertEqual(len(data), 2)
+        self.assertTrue(data['success'])
 
     def test_api_presence_weekday_no_user(self):
         """
         Testing wrong user id.
         """
         resp = self.client.get('/api/v1/presence_weekday/100')
-        self.assertEqual(resp.status_code, 404)
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.content_type, 'application/json')
+        data = json.loads(resp.data)
+        self.assertDictEqual(data, {'data': [], 'success': False})
 
     def test_api_mean_time_weekday(self):
         """
@@ -101,17 +115,25 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.content_type, 'application/json')
         data = json.loads(resp.data)
-        self.assertEqual(len(data), 7)
-        self.assertEqual(data[0], ["Mon", 0])
+        self.assertEqual(len(data), 2)
+        self.assertTrue(data['success'])
 
     def test_api_mean_time_weekday_no_user(self):
         """
-        Testing wrong user id.
+        Testing wrong user id: (string).
         """
-        resp = self.client.get('/api/v1/mean_time_weekday/100')
-        self.assertEqual(resp.status_code, 404)
         resp = self.client.get('/api/v1/mean_time_weekday/dummy')
         self.assertEqual(resp.status_code, 404)
+
+    def test_api_mean_time_weekday_wrong_user(self):
+        """
+        Testing wrong user id: (int).
+        """
+        resp = self.client.get('/api/v1/mean_time_weekday/100')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.content_type, 'application/json')
+        data = json.loads(resp.data)
+        self.assertFalse(data['success'])
 
     def test_api_presence_start_end_weekday(self):
         """
@@ -121,15 +143,23 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.content_type, 'application/json')
         data = json.loads(resp.data)
-        self.assertEqual(len(data), 7)
-        self.assertEqual(data[0], ["Mon", 0, 0])
+        self.assertEqual(len(data), 2)
+        self.assertTrue(data['success'])
+
+    def test_api_presence_start_end_weekday_wrong_user(self):
+        """
+        Testing wrong user id: (int).
+        """
+        resp = self.client.get('/api/v1/presence_start_end/100')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.content_type, 'application/json')
+        data = json.loads(resp.data)
+        self.assertFalse(data['success'])
 
     def test_api_presence_start_end_weekday_no_user(self):
         """
-        Testing wrong user id.
+        Testing wrong user id: (string).
         """
-        resp = self.client.get('/api/v1/presence_start_end/100')
-        self.assertEqual(resp.status_code, 404)
         resp = self.client.get('/api/v1/presence_start_end/dummy')
         self.assertEqual(resp.status_code, 404)
 
